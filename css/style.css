@@ -1,0 +1,28 @@
+.auth-wrap {
+    height: 100vh;
+    min-height: 600px;
+}
+.auth-wrap > .auth-bg  {
+    height: 100%;
+}
+
+.auth-bg {
+    background: #363c43;
+}
+
+.auth-form {
+    max-width: 400px;
+}
+
+.auth-form p {
+    font-size: 14px;
+}
+
+.message-container {
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+    z-index: 1050;
+    max-width: 500px;
+    width: 100%;
+}
