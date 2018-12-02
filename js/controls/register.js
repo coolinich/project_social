@@ -49,6 +49,7 @@ function submitHandler(e) {
                 setTimeout(() => window.location = "login.html", 3000);
             } else {
                 message.show({text: res.message, error: res.error});
+                passwordInput.value = '';
             }
 
         }) 

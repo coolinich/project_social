@@ -4,10 +4,12 @@ class Validation {
         this._inputs = this._form.querySelectorAll("[data-pattern]");
     }
 
+    // Add event handlers for all _inputs on _form
     init() {
         this._setEvents();
     }
 
+    // Checks if values in _inputs match corresponding data-pattern regexp and if not, marked input as invalid  
     check() {
         let state = true;
 
@@ -22,10 +24,12 @@ class Validation {
         return state;
     }
 
+    // Creates event handlers for all _inputs on _form for "focus" event
     _setEvents() {
         this._inputs.forEach((input) => input.addEventListener("focus", (e) => this._onFocusHandler(e)));
     }
 
+    // Removes "is-invalid" class on element
     _onFocusHandler(e) {
         e.target.classList.remove("is-invalid");
     }

@@ -12,7 +12,7 @@ const formModal = document.forms["resetPswForm"];
 const emailModalInput = formModal["emailModal"];
 
 
-// Login handler
+// Login handler - validates data in Login form, if correct - calls API to login and save user's data to localStorage
 function submitHandler(e) {
     e.preventDefault();
 
@@ -33,7 +33,7 @@ function submitHandler(e) {
         });
 }
 
-// Reset password handler - validates data in Reset Password form in modal dialog, if correct - calls API
+// Reset password handler - validates data in Reset Password form in modal dialog, if correct - calls API to reset password
 function resetPswHandler(e) {
     e.preventDefault();
 
