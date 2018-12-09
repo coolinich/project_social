@@ -30,6 +30,9 @@ function submitHandler(e) {
             } else {
                 message.show({text: res.message, error: res.error});
             }
+        })
+        .catch((error) => {
+            console.log(error);
         });
 }
 
@@ -50,6 +53,9 @@ function resetPswHandler(e) {
                 formModal.reset();
             }
         })
+        .catch((error) => {
+            console.log(error);
+        });
   
 }
 

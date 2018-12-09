@@ -1,5 +1,8 @@
 //Init signUp service
-const signUp = new signUpService();
+//const signUp = new signUpService();
+
+//Init auth service
+const signUp = new AuthService();
 
 //Init Message Module
 const message = new Message();
@@ -28,19 +31,20 @@ function submitHandler(e) {
     validation.init();
     if (!validation.check()) return message.show({text: "Fill in all marked fields correctly", error: true});
 
-    let newUser = {};
-    newUser.email = emailInput.value;
-    newUser.password = passwordInput.value;
-    newUser.nickname = nicknameInput.value;
-    newUser.first_name = first_nameInput.value;
-    newUser.last_name = last_nameInput.value;
-    newUser.phone = phoneInput.value;
-    newUser.gender_orientation = gender_orientationInput.value;
-    newUser.city = cityInput.value;
-    newUser.country = countryInput.value;
-    newUser.date_of_birth_day = date_of_birth_dayInput.value;
-    newUser.date_of_birth_month = date_of_birth_monthInput.value;
-    newUser.date_of_birth_year = date_of_birth_yearInput.value;
+    let newUser = {
+    email: emailInput.value,
+    password: passwordInput.value,
+    nickname: nicknameInput.value,
+    first_name: first_nameInput.value,
+    last_name: last_nameInput.value,
+    phone: phoneInput.value,
+    gender_orientation: gender_orientationInput.value,
+    city: cityInput.value,
+    country: countryInput.value,
+    date_of_birth_day: date_of_birth_dayInput.value,
+    date_of_birth_month: date_of_birth_monthInput.value,
+    date_of_birth_year: date_of_birth_yearInput.value
+   }
 
     signUp.register(newUser)
         .then(res => {
@@ -51,9 +55,10 @@ function submitHandler(e) {
                 message.show({text: res.message, error: res.error});
                 passwordInput.value = '';
             }
-
-        }) 
-
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 // Event handlers for registration form
