@@ -65,10 +65,12 @@ function onImagesUpload(e) {
 function onRemoveBtn(e) {
     if (e.target.parentElement.classList.contains('remove-wrap')) {
         const currentImgId = e.target.closest('.img-wrap').dataset.imgId;
-        img.remove(currentImgId)
+        img.getInfo(currentImgId)
         .then((res) => {
-            imageUI.removeImage(currentImgId);
-        })
+            img.remove(res)
+            .then((res) => imageUI.removeImage(currentImgId))
+            .catch(res => message.show({text: res.message, error: res.error}));
+         })
         .catch(res => message.show({text: res.message, error: res.error}));
     }
 }
