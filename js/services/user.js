@@ -5,6 +5,7 @@ class UserService {
     */
     getInfo() {
         return new Promise((resolve, reject) => {
+            // Get user id
             const id = localStorage.getItem("social_user_id");
 
             fetch(`${env.apiUrl}/public/users/get-info/${id}`)
