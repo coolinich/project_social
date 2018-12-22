@@ -1,4 +1,6 @@
-class AuthService {
+import { env } from "./../config/env";
+
+export class AuthService {
     /**
      * login - function for login user
      * @param {String} email email of existing user;

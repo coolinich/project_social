@@ -1,4 +1,6 @@
-class CommentService {
+import { env } from "./../config/env";
+
+export class CommentService {
     /**
      * @param {String} id of image
      * @param {String} text text of new comment

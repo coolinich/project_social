@@ -1,4 +1,4 @@
-class UserUI {
+export class UserUI {
     constructor() {
         this._cover = document.querySelector(".user-cover");
         this._userAvatar = document.querySelector(".user-ava");

@@ -1,4 +1,6 @@
-class UserService {
+import { env } from "./../config/env";
+
+export class UserService {
     /**
      * getInfo - function for retrieving all data about user
      * @returns {Promise} which can be resolved with data from server response (object with user's data) or error

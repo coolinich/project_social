@@ -1,3 +1,3 @@
-const env = {
+export const env = {
     apiUrl: "https://mostlikedperson-api.herokuapp.com/api"
 };

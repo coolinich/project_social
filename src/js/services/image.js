@@ -1,4 +1,6 @@
-class ImageService {
+import { env } from "./../config/env";
+
+export class ImageService {
     /**
      * getInfo - function for getting info about one image
      * @param {id} id of image to get it's info

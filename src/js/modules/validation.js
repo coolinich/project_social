@@ -1,4 +1,4 @@
-class Validation {
+export class Validation {
     constructor(form) {
         this._form = form;
         this._inputs = this._form.querySelectorAll("[data-pattern]");

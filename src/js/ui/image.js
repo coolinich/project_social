@@ -1,4 +1,4 @@
-class ImageUI {
+export class ImageUI {
     constructor() {
         this._imagesContainer = document.querySelector(".images-wrap .row.images");
     }
