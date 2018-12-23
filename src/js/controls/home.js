@@ -1,10 +1,13 @@
 import { UserService } from './../services/user';
 import { ImageService } from './../services/image';
+import { AuthService } from './../services/auth';
 import { CommentService } from './../services/comment';
+import { SearchService } from './../services/search';
 import { UserUI } from './../ui/user';
 import { ImageUI } from './../ui/image';
 import { ImageModal } from './../ui/imageModal';
 import { Message } from './../modules/message';
+import { SearchUI } from '../ui/search';
 const $ = require('jquery');
 
 
@@ -12,25 +15,35 @@ export function HomePage() {
   
     // Init User Service
     const user = new UserService();
-    // Init User Service
+    // Init Image Service
     const imageService = new ImageService();
+    // Init Auth Service
+    const authService = new AuthService();
     // Init Comments Service
     const commentService = new CommentService();
+    // Init Search Service 
+    const searchService = new SearchService();
     // Init User UI
     const userUI = new UserUI();
     // Init Image UI
     const imageUI = new ImageUI();
     // Init Image Modal UI
     const imageModal = new ImageModal();
+    // Init Search UI
+    const searchUI = new SearchUI();
     //Init Message Module
     const message = new Message();
     message.init();
-
 
     // UI page elements
     const inputCover = document.getElementById("coverImg");
     const photosInputs = document.getElementById('userPhotos');
     const photosCards = document.querySelector('.images-wrap .row.images');
+    const logoutBtn = document.querySelector('#logout');
+    // UI search elements
+    const searchForm = document.forms["search"];
+    const searchInput = searchForm.elements[0];
+
     // UI modal elements
     const addCommentForm = document.forms["addCommentForm"];
     const addCommentInput = document.forms["addCommentForm"]["comment"];
@@ -60,7 +73,11 @@ export function HomePage() {
                 .then(user.getInfo)
                 .then((data) => userUI.setCover(data.cover))
                 .catch((error) => {
-                    console.log(error);
+                    {
+                        if (error === '403')
+                            window.location = './login.html';
+                        else console.log(`error from catch ${error}`)
+                    }
                 });
         }
     }
@@ -70,7 +87,7 @@ export function HomePage() {
         if (photosInputs.files.length) {
             const [...newImages] = photosInputs.files;
             user.uploadImages(newImages)
-            .then((response) => {
+            .then((res) => {
                 user.getInfo()
                 .then((data) => {
                     imageUI.clearContainer();
@@ -78,7 +95,11 @@ export function HomePage() {
                 })
                 .catch(res => message.show({text: res.message, error: res.error}));
             })
-            .catch(res => message.show({text: res.message, error: res.error}));
+            .catch(res => {
+                if (res === '403')
+                    window.location = './login.html';
+                else console.log(`error from catch ${res}`)
+            });
         }
     }
 
@@ -101,7 +122,11 @@ export function HomePage() {
             .then((res) => {
                 imageService.remove(res)
                 .then((res) => imageUI.removeImage(currentImgId))
-                .catch(res => message.show({text: res.message, error: res.error}));
+                .catch(res => {
+                    if (res === '403')
+                    window.location = './login.html';
+                    else console.log(`error from catch ${res}`)
+                });
             })
             .catch(res => message.show({text: res.message, error: res.error}));
             return;
@@ -121,9 +146,13 @@ export function HomePage() {
                     imageModal.updateCommentsInfo(res);
                     addCommentForm.reset();
                 })
-                .catch(res => console.log('Error with comments refresh'));
+                .catch(res => console.log(res));
             })
-            .catch(res => console.log(res));
+            .catch(res => {
+                if (res === '403')
+                    window.location = './login.html';
+                else console.log(`error from catch ${res}`)
+            });
         }  else console.log('Empty edit field');  
     }
 
@@ -162,8 +191,11 @@ export function HomePage() {
                         commentEditForm.reset();
                         }
                 })
-                .catch(res => console.log(res));
-                    
+                .catch(res => {
+                    if (res === '403')
+                        window.location = './login.html';
+                    else console.log(`error from catch ${res}`)
+                });
             });
 
             return;   
@@ -179,11 +211,47 @@ export function HomePage() {
                 })
                 .catch(res => console.log('Error with comments refresh'));
             })
-            .catch(res => console.log(res));
-            
+            .catch(res => {
+                if (res === '403')
+                    window.location = './login.html';
+                else console.log(`error from catch ${res}`)
+            });
             return;   
         }
 
+    }
+
+    // function which handles clicks and changes in search field
+    function onSearchChange(e) {
+        e.preventDefault();
+        if (searchInput.value.length > 2) {
+            searchService.searchUser(searchInput.value)
+            .then((res) => {
+                if (searchUI._searchResultsContainer.classList.contains('d-none'))
+                searchUI._searchResultsContainer.classList.remove('d-none');
+                
+                if (res.length) {
+                    searchUI.clearContainer();
+                    res.forEach( user => searchUI.addSeachResult(user) );    
+                } else {
+                    searchUI.clearContainer();
+                    searchUI.addPlainText("No search results, please, try another keyword");
+                }
+            })
+            .catch(res => {
+                if (res === '403')
+                    window.location = './login.html';
+                else {
+                    console.log(`error from catch ${res}`)
+                    searchUI.clearContainer();
+                    searchUI.addPlainText("No search results, please, try another keyword");     
+                }
+            });
+        }  else {
+            searchUI.clearContainer();
+            if (!searchUI._searchResultsContainer.classList.contains('d-none'))
+                searchUI._searchResultsContainer.classList.add('d-none');
+        }
     }
 
     // Events
@@ -193,7 +261,9 @@ export function HomePage() {
     photosCards.addEventListener("click", onImageCard);
     addCommentForm.addEventListener("submit", onCommentSubmit);
     commentsWrap.addEventListener("click", onCommentClick);
-
+    searchForm.addEventListener("submit", onSearchChange);
+    searchInput.addEventListener("input", onSearchChange);
+    logoutBtn.addEventListener("click", authService.logout);
 
 
     // Remove loader

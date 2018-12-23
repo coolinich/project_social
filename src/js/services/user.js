@@ -32,7 +32,7 @@ export class UserService {
             // Get user id
             const id = localStorage.getItem("social_user_id");
 
-            if (!token || !id) return reject("Error. Unauthorized.");
+            if (!token || !id) return reject("403");
 
             fetch(`${env.apiUrl}/public/users/upload-cover/${id}`, {
                 method: "POST",
@@ -59,12 +59,12 @@ export class UserService {
                 formData.append("userPhotos", photo);
             });
             
-            // // Get token
+            // Get token
             const token = localStorage.getItem("social_user_token");
             // Get user id
             const id = localStorage.getItem("social_user_id");
 
-            if (!token || !id) return reject("Error. Unauthorized.");
+            if (!token || !id) return reject("403");
 
             fetch(`${env.apiUrl}/public/users/upload-photos/${id}`, {
                 method: "POST",

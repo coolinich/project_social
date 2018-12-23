@@ -13,7 +13,7 @@ export class CommentService {
             // Get user id
             const _id = localStorage.getItem("social_user_id");
 
-            if (!token || !id) return reject("Error. Unauthorized.");
+            if (!token || !_id) return reject("403");
 
             fetch(`${env.apiUrl}/public/users/comment/${id}`, {
                 method: "POST",
@@ -43,7 +43,7 @@ export class CommentService {
             // Get user id
             const _id = localStorage.getItem("social_user_id");
 
-            if (!token || !id) return reject("Error. Unauthorized.");
+            if (!token || !_id) return reject("403");
 
             fetch(`${env.apiUrl}/public/users/comment/${id}`, {
                 method: "DELETE",
@@ -73,7 +73,7 @@ export class CommentService {
             // Get user id
             const _id = localStorage.getItem("social_user_id");
 
-            if (!token || !id) return reject("Error. Unauthorized.");
+            if (!token || !_id) return reject("403");
 
             fetch(`${env.apiUrl}/public/users/comment/${id}`, {
                 method: "PUT",

@@ -22,6 +22,12 @@ export class AuthService {
         });
     }
 
+    /** logout - function for logout user */
+    logout() {
+        localStorage.clear();
+        return window.location = './login.html';
+    }
+
     /**
      * resetPsw - function for password reseting 
      * @param {String} email email of existing user;

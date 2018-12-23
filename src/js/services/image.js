@@ -17,7 +17,7 @@ export class ImageService {
 
     /**
      * remove - function for deleting of one earlier uploaded image from server
-     * @param {String} image_id id of image which should be deleted
+     * @param {String} _id id of image which should be deleted
      * @return {Promise} which can be resolved with data from server response or error
      */
     remove({_id, url}) {
@@ -27,9 +27,9 @@ export class ImageService {
             // Get user id
             const id = localStorage.getItem("social_user_id");
 
-            if (!token || !id) return reject({message: "Not Authorised, please, sign in again!", error: true});
+            if (!token || !id) return reject("403");
             
-            fetch(`${env.apiUrl}/public/users/remove-photo/${id}`, {
+            fetch(`${env.apiUrl}/public/users/remove-photo/${_id}`, {
                 method: "DELETE",
                 body: JSON.stringify({
                     image_id: _id,
