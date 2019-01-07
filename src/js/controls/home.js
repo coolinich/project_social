@@ -48,6 +48,7 @@ export function HomePage() {
     const addCommentForm = document.forms["addCommentForm"];
     const addCommentInput = document.forms["addCommentForm"]["comment"];
     const commentsWrap = document.querySelector(".current-image-comments-wrap");
+    const confirmBtn = document.querySelector("#confirmBtn");
 
     // function gets all info about user and added it to layout 
     function onLoad(e) {
@@ -103,7 +104,7 @@ export function HomePage() {
         }
     }
 
-    // function for removing one image from server and layout
+    // function for handlign of different actions with one image: remove from server and layout, show modals
     function onImageCard(e) {
         if (e.target.classList.contains('on-hover')) {
             const currentImgId = e.target.closest('.img-wrap').dataset.imgId;
@@ -118,19 +119,28 @@ export function HomePage() {
         }
         if (e.target.parentElement.classList.contains('remove-wrap')) {
             const currentImgId = e.target.closest('.img-wrap').dataset.imgId;
-            imageService.getInfo(currentImgId)
-            .then((res) => {
-                imageService.remove(res)
-                .then((res) => imageUI.removeImage(currentImgId))
-                .catch(res => {
-                    if (res === '403')
-                    window.location = './login.html';
-                    else console.log(`error from catch ${res}`)
-                });
-            })
-            .catch(res => message.show({text: res.message, error: res.error}));
+            confirmBtn.setAttribute('data-imgid', currentImgId);
+            $('#confirmActionModal').modal('toggle');
             return;
         }
+    }
+
+    // function for removing image after user confirmed it
+    function onImageRemove() {
+        imageService.getInfo(confirmBtn.dataset.imgid)
+        .then((res) => {
+        imageService.remove(res)
+        .then((res) => {
+            res.error ? console.log(`Response from DELETE: ${res}`) : imageUI.removeImage(confirmBtn.dataset.imgid);
+        })
+        .catch(res => {
+            if (res === '403')
+            window.location = './login.html';
+            else console.log(`error from catch ${res}`)
+        });
+        })
+        .catch(res => message.show({text: res.message, error: res.error}));
+        $('#confirmActionModal').modal('toggle');
     }
 
     // function for adding comment to image
@@ -227,14 +237,12 @@ export function HomePage() {
         if (searchInput.value.length > 2) {
             searchService.searchUser(searchInput.value)
             .then((res) => {
-                if (searchUI._searchResultsContainer.classList.contains('d-none'))
-                searchUI._searchResultsContainer.classList.remove('d-none');
-                
+                searchUI.showContainer();
+                searchUI.clearContainer();
+
                 if (res.length) {
-                    searchUI.clearContainer();
                     res.forEach( user => searchUI.addSeachResult(user) );    
                 } else {
-                    searchUI.clearContainer();
                     searchUI.addPlainText("No search results, please, try another keyword");
                 }
             })
@@ -249,8 +257,7 @@ export function HomePage() {
             });
         }  else {
             searchUI.clearContainer();
-            if (!searchUI._searchResultsContainer.classList.contains('d-none'))
-                searchUI._searchResultsContainer.classList.add('d-none');
+            searchUI.hideContainer();
         }
     }
 
@@ -264,6 +271,7 @@ export function HomePage() {
     searchForm.addEventListener("submit", onSearchChange);
     searchInput.addEventListener("input", onSearchChange);
     logoutBtn.addEventListener("click", authService.logout);
+    confirmBtn.addEventListener('click', onImageRemove);
 
 
     // Remove loader

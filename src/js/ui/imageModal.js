@@ -41,7 +41,7 @@ export class ImageModal {
     // function adds all comments for image to layout
     setComments({comments, owner}) {
         let template = "";
-        comments.forEach((comment) => template += ImageModal._commentTemplate(comment, owner._id));
+        comments.forEach((comment) => template += ImageModal._commentTemplate(comment, owner._id, owner.full_name));
         this._commentContainer.insertAdjacentHTML("afterbegin", template);
     }
 
@@ -56,7 +56,7 @@ export class ImageModal {
     }
     
     // template of one comment
-    static _commentTemplate({owner, avatar, full_name, text, time_update, _id, sub_comments}, ownerId) {
+    static _commentTemplate({owner, avatar, text, time_update, _id, sub_comments}, ownerId, ownerFullName) {
         const currentUserId = localStorage.getItem("social_user_id");
         const isOwner = currentUserId == owner || currentUserId == ownerId;
         return `
@@ -67,7 +67,7 @@ export class ImageModal {
                 </div>
                 <!-- /.comment-owner -->
                 <div class="comment-item-info d-flex flex-column">
-                    <h6 class="font-weight-bold">${full_name}</h6>
+                    <h6 class="font-weight-bold">${ownerFullName}</h6>
                     <p class="comment-text">${text}</p>
                     <div class="edit-comment-form mt-4 d-none">
                         <form name="editCommentForm-${_id}">

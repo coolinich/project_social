@@ -29,12 +29,14 @@ export class ImageService {
 
             if (!token || !id) return reject("403");
             
-            fetch(`${env.apiUrl}/public/users/remove-photo/${_id}`, {
+            fetch(`${env.apiUrl}/public/users/remove-photo/${id}`, {
                 method: "DELETE",
                 body: JSON.stringify({
                     image_id: _id,
-                    image_url: url.match(/userPhotos-.+$/)[0]}),
+                    image_url: url.match(/users-photos\/userPhotos-.+$/)[0]
+                }),
                 headers: {
+                    "Accept": "application/json, text/plain, */*",
                     "x-access-token": token,
                     "Content-type": "application/json"
                 }

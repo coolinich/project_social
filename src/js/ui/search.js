@@ -19,6 +19,16 @@ export class SearchUI {
         this._searchResultsContainer.innerHTML = "";
     }
 
+    showContainer() {
+        if (this._searchResultsContainer.classList.contains('d-none'))
+        this._searchResultsContainer.classList.remove('d-none');
+    }
+
+    hideContainer() {
+        if (!this._searchResultsContainer.classList.contains('d-none'))
+        this._searchResultsContainer.classList.add('d-none');
+    }
+
     // template of one item from search results
     static _searchResultTemplate({avatar, city, full_name}) {
         return `
